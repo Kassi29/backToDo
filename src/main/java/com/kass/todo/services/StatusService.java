@@ -19,4 +19,8 @@ public class StatusService {
         return iStatus.findById(id)
                 .orElseThrow(() -> new NotFoundException("Status not found"));
     }
+
+    public boolean existStatus(int id){
+        return iStatus.existsById(id);
+    }
 }
