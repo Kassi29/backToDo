@@ -13,9 +13,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/tasks")
@@ -42,7 +40,7 @@ public class TaskController {
     }
     
     @PostMapping
-    public ResponseEntity<?> createTask(@Valid @RequestBody TaskModel taskModel, BindingResult bindingResult){
+    public ResponseEntity<Object> createTask(@Valid @RequestBody TaskModel taskModel, BindingResult bindingResult){
         if(bindingResult.hasErrors()){
 
             List<String> errorMessages = bindingResult.getAllErrors().stream()
