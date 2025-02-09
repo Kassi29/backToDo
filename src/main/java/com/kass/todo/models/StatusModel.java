@@ -15,6 +15,10 @@ public class StatusModel {
         //for the DB
     }
 
+    public StatusModel(String name){
+        this.name = name;
+    }
+
     public StatusModel(int id,String name) {
         this.id = id;
         this.name = name;
