@@ -1,6 +1,9 @@
 package com.kass.todo.models;
 
+import com.kass.todo.validation.ExistsByCategoryName;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 
 
 @Entity
@@ -11,6 +14,10 @@ public class CategoryModel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+    @NotBlank(message = "Put a name for yor category")
+    @Size(min = 3, message = "The name has to have at least 3 letters")
+    @Size(max = 20, message = "The category name has to have less than 20 letters")
+    @ExistsByCategoryName(message = "A category with this name already exists. Please choose another name.")
     private String name;
 
     public CategoryModel() {
