@@ -5,6 +5,8 @@ import com.kass.todo.repositories.ICategory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 public class CategoryService {
     private final ICategory iCategory;
@@ -14,9 +16,32 @@ public class CategoryService {
     }
 
     @Transactional(readOnly = true)
+    public List<CategoryModel> getAllCategories() {
+        return iCategory.findAll();
+    }
+
+    @Transactional(readOnly = true)
     public CategoryModel getCategoryById(int id) {
         return iCategory.findById(id)
                 .orElseThrow(() -> new NotFoundException("Category not found"));
     }
+
+    @Transactional
+    public CategoryModel createCategory (CategoryModel categoryModel){ return iCategory.save(categoryModel);}
+
+    @Transactional
+    public CategoryModel updateCategory(int id, CategoryModel categoryModel) {
+        CategoryModel existingCategory = getCategoryById(id);
+
+        existingCategory.setName(categoryModel.getName());
+        return iCategory.save(existingCategory);
+    }
+
+    @Transactional
+    public void deleteCategory(int id){
+        CategoryModel existingCategory = getCategoryById(id);
+        iCategory.delete(existingCategory);
+    }
+
 
 }
