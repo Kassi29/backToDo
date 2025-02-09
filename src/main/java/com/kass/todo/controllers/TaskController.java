@@ -1,6 +1,6 @@
 package com.kass.todo.controllers;
 
-import com.kass.todo.models.CategoryModel;
+import com.kass.todo.exceptions.NotFoundException;
 import com.kass.todo.models.StatusModel;
 import com.kass.todo.models.TaskModel;
 import com.kass.todo.services.CategoryService;
@@ -42,48 +42,60 @@ public class TaskController {
     @PostMapping
     public ResponseEntity<Object> createTask(@Valid @RequestBody TaskModel taskModel, BindingResult bindingResult){
         if(bindingResult.hasErrors()){
-
-            List<String> errorMessages = bindingResult.getAllErrors().stream()
-                    .map(ObjectError::getDefaultMessage)
-                    .toList();
-            return new ResponseEntity<>(errorMessages, HttpStatus.BAD_REQUEST);
+            return getValidationErrors(bindingResult);
         }
-        categoryExist(taskModel.getCategory().getId());
-        statusExist(taskModel.getStatus().getId());
+        if (categoryExist(taskModel.getCategory().getId())) {
+            throw new NotFoundException("Category not found");
+        }
+        if (statusExist(taskModel.getStatus().getId())) {
+            throw new NotFoundException("Status not found");
+        }
         return new ResponseEntity<>(taskService.createTask(taskModel),HttpStatus.CREATED);
+
+
     }
     
     @PutMapping("/{id}")
-    public ResponseEntity<TaskModel> updateTask(@PathVariable int id, @RequestBody TaskModel taskModel){
+    public ResponseEntity<Object> updateTask(@Valid @RequestBody TaskModel taskModel, BindingResult bindingResult, @PathVariable int id){
+        if(bindingResult.hasErrors()){
+            return getValidationErrors(bindingResult);
+        }
+        if (categoryExist(taskModel.getCategory().getId())) {
+            throw new NotFoundException("Category not found");
+        }
         TaskModel updatedTask = taskService.updateTask(id,taskModel);
         return new ResponseEntity<>(updatedTask,HttpStatus.OK);
     }
     
     @PutMapping("/{id}/status")
-    public ResponseEntity<TaskModel> updateTaskStatus(@PathVariable int id, @RequestBody StatusModel statusModel){
-        statusExist(statusModel.getId());
+    public ResponseEntity<Object> updateTaskStatus(@Valid @RequestBody StatusModel statusModel,BindingResult bindingResult , @PathVariable int id){
+        if (statusExist(statusModel.getId())) {
+            throw new NotFoundException("Status not found");
+        }
+        if(bindingResult.hasErrors()){
+            return getValidationErrors(bindingResult);
+        }
         TaskModel updatedTask = taskService.updateStatus(id,statusModel);
         return new ResponseEntity<>(updatedTask,HttpStatus.OK);
     }
 
-    @PutMapping("/{id}/category")
-    public ResponseEntity<TaskModel> updateTaskCategory(@PathVariable int id, @RequestBody CategoryModel categoryModel){
-        TaskModel updatedTask = taskService.updateCategory(id,categoryModel);
-        categoryExist(categoryModel.getId());
-        return new ResponseEntity<>(updatedTask,HttpStatus.OK);
-    }
-    
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteTask(@PathVariable int id){
         taskService.deleteTask(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    private void statusExist(int id){
-        statusService.getStatusById(id);
+    private boolean statusExist(int id){
+        return !statusService.existStatus(id);
     }
-    private void categoryExist(int id){
-        categoryService.getCategoryById(id);
+    private boolean categoryExist(int id){
+        return !categoryService.existCategory(id);
+    }
+    private ResponseEntity<Object> getValidationErrors(BindingResult bindingResult){
+        List<String> errorMessages = bindingResult.getAllErrors().stream()
+                .map(ObjectError::getDefaultMessage)
+                .toList();
+        return new ResponseEntity<>(errorMessages,HttpStatus.BAD_REQUEST);
     }
 
 

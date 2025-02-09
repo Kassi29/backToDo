@@ -1,7 +1,6 @@
 package com.kass.todo.services;
 
 import com.kass.todo.exceptions.NotFoundException;
-import com.kass.todo.models.CategoryModel;
 import com.kass.todo.models.StatusModel;
 import com.kass.todo.models.TaskModel;
 import com.kass.todo.repositories.ITask;

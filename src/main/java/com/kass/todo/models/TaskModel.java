@@ -17,10 +17,12 @@ public class TaskModel {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     @NotBlank(message = "Put a name for yor task")
-    @Size(min = 3, max = 10 ,message = "The name has to have at least 3 letters")
+    @Size(min = 3, message = "The name has to have at least 3 letters")
+    @Size(max = 10, message = "The name has to have max 10 letters")
     private String name;
     @NotBlank(message = "Put a description for yor task")
-    @Size(min = 3, max = 40 ,message = "The description has to have at least 3 letters")
+    @Size(min = 3, message = "The description has to have at least 3 letters")
+    @Size(max = 20, message = "The description has to have max 20 letters")
     private String description;
 
     @NotNull(message = "Please choose a category")
