@@ -47,12 +47,8 @@ public class TaskController {
         if (categoryExist(taskModel.getCategory().getId())) {
             throw new NotFoundException("Category not found");
         }
-        if (statusExist(taskModel.getStatus().getId())) {
-            throw new NotFoundException("Status not found");
-        }
+        taskModel.getStatus().setId(1);
         return new ResponseEntity<>(taskService.createTask(taskModel),HttpStatus.CREATED);
-
-
     }
     
     @PutMapping("/{id}")
@@ -69,7 +65,7 @@ public class TaskController {
     
     @PutMapping("/{id}/status")
     public ResponseEntity<Object> updateTaskStatus(@Valid @RequestBody StatusModel statusModel,BindingResult bindingResult , @PathVariable int id){
-        if (statusExist(statusModel.getId())) {
+        if (!statusService.existStatus(id)) {
             throw new NotFoundException("Status not found");
         }
         if(bindingResult.hasErrors()){
@@ -84,10 +80,7 @@ public class TaskController {
         taskService.deleteTask(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
-
-    private boolean statusExist(int id){
-        return !statusService.existStatus(id);
-    }
+    
     private boolean categoryExist(int id){
         return !categoryService.existCategory(id);
     }
