@@ -8,5 +8,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface ICategory extends JpaRepository<CategoryModel, Integer> {
     boolean existsByName(String name);
+    boolean existsById(int id);
 
 }

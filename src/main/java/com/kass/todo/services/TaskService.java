@@ -37,38 +37,27 @@ public class TaskService {
 
     @Transactional
     public TaskModel updateTask(int id , TaskModel taskModel){
-        TaskModel existingTask = getTask(id);
+        TaskModel existingTask = getTaskById(id);
 
         existingTask.setDescription(taskModel.getDescription());
         existingTask.setName(taskModel.getName());
+        existingTask.setCategory(taskModel.getCategory());
         return iTask.save(existingTask);
     }
 
     @Transactional
     public TaskModel updateStatus(int id, StatusModel statusModel){
-        TaskModel existingTask = getTask(id);
+        TaskModel existingTask = getTaskById(id);
 
         existingTask.setStatus(statusModel);
         return iTask.save(existingTask);
     }
 
-    @Transactional
-    public TaskModel  updateCategory(int id, CategoryModel categoryModel){
-        TaskModel existingTask = getTask(id);
-
-        existingTask.setCategory(categoryModel);
-        return iTask.save(existingTask);
-    }
 
     @Transactional
     public void deleteTask(int id){
-        TaskModel existingTask = getTask(id);
+        TaskModel existingTask = getTaskById(id);
         iTask.delete(existingTask);
-    }
-
-    private TaskModel getTask(int id){
-        return iTask.findById(id)
-                .orElseThrow(() -> new NotFoundException("Task not found"));
     }
 
 

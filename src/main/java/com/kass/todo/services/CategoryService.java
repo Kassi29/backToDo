@@ -43,5 +43,9 @@ public class CategoryService {
         iCategory.delete(existingCategory);
     }
 
+    public boolean existCategory(int id){
+        return iCategory.existsById(id);
+    }
+
 
 }

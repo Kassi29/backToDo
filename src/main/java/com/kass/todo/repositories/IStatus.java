@@ -6,4 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface IStatus extends JpaRepository<StatusModel,Integer> {
+    boolean existsById(int id);
 }
