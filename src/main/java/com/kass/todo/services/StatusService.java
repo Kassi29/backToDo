@@ -6,12 +6,19 @@ import com.kass.todo.repositories.IStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 public class StatusService {
     private final IStatus iStatus;
 
     public StatusService(IStatus iStatus) {
         this.iStatus = iStatus;
+    }
+
+    @Transactional(readOnly = true)
+    public List<StatusModel> getAll() {
+        return iStatus.findAll();
     }
 
     @Transactional(readOnly = true)
