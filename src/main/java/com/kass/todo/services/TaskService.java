@@ -59,6 +59,11 @@ public class TaskService {
         iTask.delete(existingTask);
     }
 
+    @Transactional(readOnly = true)
+    public List<TaskModel> getTasksByStatus(int statusId){
+        return iTask.findAllByStatusId(statusId);
+    }
+
 
 
 }

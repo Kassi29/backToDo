@@ -80,7 +80,12 @@ public class TaskController {
         taskService.deleteTask(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
-    
+
+    @GetMapping("/filter/{id}")
+    public List<TaskModel> tasksByStatus(@PathVariable int id){
+        return taskService.getTasksByStatus(id);
+    }
+
     private boolean categoryExist(int id){
         return !categoryService.existCategory(id);
     }
@@ -90,6 +95,8 @@ public class TaskController {
                 .toList();
         return new ResponseEntity<>(errorMessages,HttpStatus.BAD_REQUEST);
     }
+
+
 
 
 

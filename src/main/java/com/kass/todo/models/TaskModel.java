@@ -11,8 +11,8 @@ import jakarta.validation.constraints.Size;
 @Table(name = "task")
 
 
-
 public class TaskModel {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
