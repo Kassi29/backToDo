@@ -20,6 +20,9 @@ public class CategoryModel {
     @ExistsByCategoryName(message = "A category with this name already exists. Please choose another name.")
     private String name;
 
+    @NotBlank
+    private String color;
+
     public CategoryModel() {
         //for the DB
     }
