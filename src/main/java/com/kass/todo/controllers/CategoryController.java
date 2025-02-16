@@ -1,8 +1,11 @@
 package com.kass.todo.controllers;
 
+import com.kass.todo.exceptions.ForeignKeyConstraintViolationException;
 import com.kass.todo.models.CategoryModel;
 import com.kass.todo.services.CategoryService;
 import jakarta.validation.Valid;
+import org.hibernate.exception.ConstraintViolationException;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -50,10 +53,15 @@ public class CategoryController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteCategory(@PathVariable int id){
+    public ResponseEntity<Void> deleteCategory(@PathVariable int id) {
+        try{
         categoryService.deleteCategory(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        } catch (Exception e) {
+            throw new ForeignKeyConstraintViolationException("You cannot delete this category because it has tasks associated with it. Please delete the tasks first.");
+        }
     }
+
 
     private ResponseEntity<Object> getValidationErrors(BindingResult bindingResult){
         List<String> errorMessages = bindingResult.getAllErrors().stream()

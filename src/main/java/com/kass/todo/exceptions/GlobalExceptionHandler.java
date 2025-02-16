@@ -14,4 +14,13 @@ public class GlobalExceptionHandler {
         errorResponse.setMessage(ex.getMessage());
         return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
     }
+
+    @ExceptionHandler(ForeignKeyConstraintViolationException.class)
+    public ResponseEntity<ErrorResponse> handleForeignKeyConstraintViolationException(ForeignKeyConstraintViolationException ex) {
+        ErrorResponse errorResponse = new ErrorResponse();
+        errorResponse.setMessage(ex.getMessage());
+        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+    }
+
 }
+
