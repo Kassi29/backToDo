@@ -1,5 +1,6 @@
 package com.kass.todo.controllers;
 
+import com.kass.todo.dto.TaskDto;
 import com.kass.todo.exceptions.NotFoundException;
 import com.kass.todo.models.StatusModel;
 import com.kass.todo.models.TaskModel;
@@ -9,11 +10,13 @@ import com.kass.todo.services.TaskService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.config.Task;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/tasks")
@@ -82,9 +85,24 @@ public class TaskController {
     }
 
     @GetMapping("/filter/{id}")
-    public List<TaskModel> tasksByStatus(@PathVariable int id){
-        return taskService.getTasksByStatus(id);
+    public List<TaskDto> tasksByStatus(@PathVariable int id){
+        List<TaskModel> tasks = taskService.getTasksByStatus(id) ;
+        return  tasks.stream()
+                .map(this::convertTaskToDto)
+                .collect(Collectors.toList());
     }
+
+    public TaskDto convertTaskToDto(TaskModel task){
+        TaskDto taskDto = new TaskDto();
+
+        taskDto.setId(task.getId());
+        taskDto.setName(task.getName());
+        taskDto.setDescription(task.getDescription());
+        taskDto.setCategoryName(task.getCategory().getName());
+        return taskDto;
+
+    }
+
 
     private boolean categoryExist(int id){
         return !categoryService.existCategory(id);
