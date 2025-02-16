@@ -20,16 +20,17 @@ public class CategoryModel {
     @ExistsByCategoryName(message = "A category with this name already exists. Please choose another name.")
     private String name;
 
-    @NotBlank
+    @NotBlank(message = "Please chose a color")
     private String color;
 
     public CategoryModel() {
         //for the DB
     }
 
-    public CategoryModel(int id ,String name) {
+    public CategoryModel(int id ,String name,  String color) {
         this.id = id;
         this.name = name;
+        this.color = color;
     }
     public int getId() {
         return id;
@@ -41,5 +42,12 @@ public class CategoryModel {
     }
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getColor() {
+        return color;
+    }
+    public void setColor(String color) {
+        this.color = color;
     }
 }
