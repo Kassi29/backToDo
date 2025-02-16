@@ -50,6 +50,10 @@ public class TaskController {
         if (categoryExist(taskModel.getCategory().getId())) {
             throw new NotFoundException("Category not found");
         }
+        if(taskModel.getStatus() == null){
+            StatusModel statusModel = new StatusModel();
+            taskModel.setStatus(statusModel);
+        }
         taskModel.getStatus().setId(1);
         return new ResponseEntity<>(taskService.createTask(taskModel),HttpStatus.CREATED);
     }
