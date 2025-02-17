@@ -3,13 +3,13 @@ package com.kass.todo.controllers;
 import com.kass.todo.exceptions.ForeignKeyConstraintViolationException;
 import com.kass.todo.models.CategoryModel;
 import com.kass.todo.services.CategoryService;
-import jakarta.validation.Valid;
-import org.hibernate.exception.ConstraintViolationException;
-import org.springframework.dao.DataIntegrityViolationException;
+import com.kass.todo.validation.UpdateGroup;
+import com.kass.todo.validation.CreateGroup;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -36,7 +36,7 @@ public class CategoryController {
     }
 
     @PostMapping
-    public ResponseEntity<Object> createCategory(@Valid @RequestBody CategoryModel category , BindingResult bindingResult){
+    public ResponseEntity<Object> createCategory(@Validated(CreateGroup.class) @RequestBody CategoryModel category , BindingResult bindingResult){
         if(bindingResult.hasErrors()){
             return getValidationErrors(bindingResult);
         }
@@ -44,10 +44,13 @@ public class CategoryController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Object> updateCategory(@Valid @RequestBody CategoryModel categoryModel, BindingResult bindingResult, @PathVariable int id){
+    public ResponseEntity<Object> updateCategory(@Validated(UpdateGroup.class) @RequestBody CategoryModel categoryModel, BindingResult bindingResult, @PathVariable int id){
+
         if(bindingResult.hasErrors()){
            return getValidationErrors(bindingResult);
         }
+
+
         return new ResponseEntity<>(categoryService.updateCategory(id,categoryModel),HttpStatus.OK);
 
     }
