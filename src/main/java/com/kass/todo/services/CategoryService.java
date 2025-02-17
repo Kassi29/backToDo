@@ -1,4 +1,5 @@
 package com.kass.todo.services;
+import com.kass.todo.exceptions.ExistsNameCategoryException;
 import com.kass.todo.exceptions.NotFoundException;
 import com.kass.todo.models.CategoryModel;
 import com.kass.todo.repositories.ICategory;
@@ -6,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Objects;
 
 @Service
 public class CategoryService {
@@ -33,7 +35,14 @@ public class CategoryService {
     public CategoryModel updateCategory(int id, CategoryModel categoryModel) {
         CategoryModel existingCategory = getCategoryById(id);
 
-        existingCategory.setName(categoryModel.getName());
+        if(!Objects.equals(existingCategory.getName(), categoryModel.getName())) {
+            if (iCategory.countByName(categoryModel.getName()) > 0) {
+                throw new ExistsNameCategoryException("A category with this name already exists. Please choose another name.");
+            }
+            existingCategory.setName(categoryModel.getName());
+        }
+        existingCategory.setColor(categoryModel.getColor());
+
         existingCategory.setColor(categoryModel.getColor());
         return iCategory.save(existingCategory);
     }
