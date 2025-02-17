@@ -34,6 +34,7 @@ public class CategoryService {
         CategoryModel existingCategory = getCategoryById(id);
 
         existingCategory.setName(categoryModel.getName());
+        existingCategory.setColor(categoryModel.getColor());
         return iCategory.save(existingCategory);
     }
 
