@@ -6,6 +6,7 @@ public class TaskDto {
     String name;
     String description;
     String categoryName;
+    String categoryColor;
 
     public TaskDto() {}
 
@@ -46,5 +47,13 @@ public class TaskDto {
 
     public void setCategoryName(String categoryName) {
         this.categoryName = categoryName;
+    }
+
+    public String getCategoryColor() {
+        return categoryColor;
+    }
+
+    public void setCategoryColor(String categoryColor) {
+        this.categoryColor = categoryColor;
     }
 }

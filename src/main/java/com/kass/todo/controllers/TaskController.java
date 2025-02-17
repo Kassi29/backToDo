@@ -103,6 +103,7 @@ public class TaskController {
         taskDto.setName(task.getName());
         taskDto.setDescription(task.getDescription());
         taskDto.setCategoryName(task.getCategory().getName());
+        taskDto.setCategoryColor(task.getCategory().getColor());
         return taskDto;
 
     }
