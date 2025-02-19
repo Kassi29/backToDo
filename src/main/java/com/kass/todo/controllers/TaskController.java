@@ -72,7 +72,7 @@ public class TaskController {
     
     @PutMapping("/{id}/status")
     public ResponseEntity<Object> updateTaskStatus(@Valid @RequestBody StatusModel statusModel,BindingResult bindingResult , @PathVariable int id){
-        if (!statusService.existStatus(id)) {
+        if (!statusService.existStatus(statusModel.getId())) {
             throw new NotFoundException("Status not found");
         }
         if(bindingResult.hasErrors()){
